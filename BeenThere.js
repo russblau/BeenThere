@@ -11,7 +11,7 @@
 // @require         https://greasyfork.org/scripts/27254-clipboard-js/code/clipboardjs.js
 // @require         https://update.greasyfork.org/scripts/28502/187735/jQuery%20UI%20-%20v1114.js
 // @require         https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js
-// @version         2025.07.04.01
+// @version         2025.08.02.01
 // @grant           unsafeWindow
 // @downloadURL https://update.greasyfork.org/scripts/538122/WME%20BeenThere-dev.user.js
 // @updateURL https://update.greasyfork.org/scripts/538122/WME%20BeenThere-dev.meta.js
@@ -500,7 +500,12 @@
             };
             btSettings = $.extend({}, defaultSettings, loadedSettings);
 
-            let serverSettings = await WazeWrap.Remote.RetrieveSettings("BeenThere");
+            let serverSettings;
+            try {
+                serverSettings = await WazeWrap.Remote.RetrieveSettings("BeenThere");
+            } catch {
+                serverSettings = null;
+            }
             if (serverSettings && serverSettings.lastSaved > btSettings.lastSaved) {
                 if (! serverSettings.hasOwnProperty("converted")) {
                     convertCoords(serverSettings);
