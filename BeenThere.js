@@ -11,10 +11,8 @@
 // @require         https://greasyfork.org/scripts/27254-clipboard-js/code/clipboardjs.js
 // @require         https://update.greasyfork.org/scripts/28502/187735/jQuery%20UI%20-%20v1114.js
 // @require         https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js
-// @version         2025.08.02.01
+// @version         2025.08.12.01
 // @grant           unsafeWindow
-// @downloadURL https://update.greasyfork.org/scripts/538122/WME%20BeenThere-dev.user.js
-// @updateURL https://update.greasyfork.org/scripts/538122/WME%20BeenThere-dev.meta.js
 // ==/UserScript==
 //---------------------------------------------------------------------------------------
 
@@ -465,15 +463,6 @@
                 convertCoords(loadedSettings);
             }
 
-            const shortcutDefaults = {
-                NewBoxShortcut: '0,-1',
-                NewUserRectShortcut: '0,-2',
-                NewUserCircleShortcut: '0,-3',
-                RemoveLastShapeShortcut: '0,-4',
-                RedoLastShapeShortcut: '0,-5',
-                RemoveAllShapesShortcut: '0,-6'
-            };
-
             const defaultSettings = {
                 converted: true,
                 layerHistory: [],
@@ -485,12 +474,12 @@
                 CP4: "#00FD22",
                 DrawShapeBorder: true,
                 FillShape: false,
-                NewBoxShortcut: '0,-1',
-                NewUserRectShortcut: '0,-2',
-                NewUserCircleShortcut: '0,-3',
-                RemoveLastShapeShortcut: '0,-4',
-                RedoLastShapeShortcut: '0,-5',
-                RemoveAllShapesShortcut: '0,-6',
+                NewBoxShortcut: null,
+                NewUserRectShortcut: null,
+                NewUserCircleShortcut: null,
+                RemoveLastShapeShortcut: null,
+                RedoLastShapeShortcut: null,
+                RemoveAllShapesShortcut: null,
                 SettingsLocTop: "40%",
                 SettingsLocLeft: "50%",
                 Groups: {"default": []},
@@ -522,8 +511,10 @@
             ['NewBoxShortcut', 'NewUserRectShortcut', 'NewUserCircleShortcut',
              'RemoveLastShapeShortcut', 'RedoLastShapeShortcut', 'RemoveAllShapesShortcut'].forEach(
                 shortcut => {
-                    if (btSettings[shortcut] === "" || btSettings[shortcut] === "-1") {
-                        btSettings[shortcut] = shortcutDefaults[shortcut];
+                    if (btSettings[shortcut] !== null) {
+                        if (btSettings[shortcut] === "" || btSettings[shortcut] === "-1" || btSettings[shortcut].match(/\(0,-\d\)/) !== null) {
+                            btSettings[shortcut] = null;
+                        }
                     }
                 }
             );
